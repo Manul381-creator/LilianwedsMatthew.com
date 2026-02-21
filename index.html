@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Invitation - Mr & Mrs Mburu</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: #fff8f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .card {
+        width: 90%;
+        max-width: 400px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        text-align: center;
+        padding: 20px;
+        cursor: pointer;
+        transition: transform 0.6s ease;
+        transform-style: preserve-3d;
+    }
+    .card.open {
+        transform: rotateY(180deg);
+    }
+    .front, .back {
+        position: absolute;
+        width: 100%;
+        backface-visibility: hidden;
+    }
+    .front {
+        font-size: 1.2em;
+        color: #ff4081;
+    }
+    .back {
+        transform: rotateY(180deg);
+        padding: 20px;
+        color: #444;
+    }
+    h1 {
+        color: #ff4081;
+    }
+    .balloons {
+        font-size: 2em;
+    }
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="card" id="inviteCard">
+    <div class="front">
+        <div class="balloons">🎈🎈🎈</div>
+        <h1>You're Invited!</h1>
+        <p>Tap to open the love story 💌</p>
+    </div>
+    <div class="back">
+        <h1>Mr. & Mrs. Mburu</h1>
+        <p>With hearts full of joy, we invite you to join us<br>
+        as we celebrate our union in love and life.</p>
+        <p><strong>Date:</strong> 25th April 2026<br>
+        <strong>Venue:</strong> Kabati AIC</p>
+        <p>“Two souls, one heart, one beautiful journey.”</p>
+        <div class="balloons">💖🎉💖</div>
+    </div>
+</div>
+
+<script>
+// Card flip
+document.getElementById('inviteCard').addEventListener('click', function() {
+    this.classList.toggle('open');
+    startConfetti();
+});
+
+// Simple confetti animation
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+function ConfettiPiece() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height - canvas.height;
+    this.size = Math.random() * 8 + 2;
+    this.speed = Math.random() * 3 + 2;
+    this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+}
+function startConfetti() {
+    confetti = Array.from({length: 150}, () => new ConfettiPiece());
+    animateConfetti();
+}
+function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confetti.forEach((c, i) => {
+        c.y += c.speed;
+        if (c.y > canvas.height) confetti[i] = new ConfettiPiece();
+        ctx.fillStyle = c.color;
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    requestAnimationFrame(animateConfetti);
+}
+</script>
+
+</body>
+</html>
